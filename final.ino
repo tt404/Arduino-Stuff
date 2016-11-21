@@ -1,3 +1,6 @@
+// Static variables
+#define lcd_ticrate 20
+
 // LCD stuff
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -15,11 +18,15 @@ char mus_toSend[128];
 char lcd_bot[16]; //bottom
 char lcd_top[16]; //top
 
+// Update rate / fps
+int lcd_updaterate;
+
 void setup() 
 { 
   Serial.begin(9600);
   lcd.begin(16,2);
   lcd.print("Welcome to test");
+  lcd_updaterate = 1000 / lcd_ticrate; // Currently lcd_ticrate is set to 20, thus this will run 20 times a second.
   delay(1000);
 }
 
@@ -64,27 +71,5 @@ void loop()
 
   
   
-  delay(50);
+  delay(lcd_updaterate); 
 }
-/*void setup() {
-  Serial.begin(9600);
-  
-  // put your setup code here, to run once:
-  pinMode(button,INPUT);
-  pinMode(led,OUTPUT);
-
-
-}
-  
-void loop() {
-  // put your main code here, to run repeatedly:
-if (Serial.available()>0){
- if( digitalRead(button)==HIGH){
-    digitalWrite(led,HIGH);
-    delay(500);
-  }
-}
-
-  digitalWrite(led,LOW);
-}
-*/
