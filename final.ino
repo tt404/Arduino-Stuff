@@ -46,7 +46,7 @@ void loop()
 
     // Bottom
     for(int i = 16; i < 32 ; i++)
-      lcd_top[i] = mus_temp[i];
+      lcd_bot[i - 16] = mus_temp[i];
 
     // Display it on the lcd now.
     // First we clear.
@@ -63,7 +63,7 @@ void loop()
     // Done displaying to LCD.
     // Transfer the next 32 bits from temp into toSend.
     for(int i = 32; i < 128; i++)
-      mus_toSend[i] = mus_temp[i];
+      mus_toSend[i - 32] = mus_temp[i];
 
     // Send the newly transferred stuff.
     Serial.print(mus_toSend);
