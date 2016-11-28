@@ -11,9 +11,6 @@ byte mus_incomingByte;
 // The Bytes are then stored into this temp array
 char mus_temp[128];
 
-// We place whatever is in temp+32 -> end, into this array and send it.
-char mus_toSend[128];
-
 // char arrays to hold what to print on different y levels of the lcd
 char lcd_bot[16]; //bottom
 char lcd_top[16]; //top
