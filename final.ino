@@ -43,19 +43,19 @@ void loop()
     // Update top and bottom arrays for lcd
     for(int i = 0; i < 16 ; i++)
     {
-      if(mus_temp[i] == 0)
+      if(mus_temp[i] == 1)
         lcd_bot[i] = 0xA0;
       else
-        lcd_bot[i] = mus_temp[i] - 1;
+        lcd_bot[i] = mus_temp[i] - 2;
     }
     
     // Bottom
     for(int i = 16; i < 32 ; i++)
     {
-      if(mus_temp[i] == 0)
+      if(mus_temp[i] == 1)
         lcd_bot[i - 16] = 0xA0;
       else
-        lcd_bot[i - 16] = mus_temp[i] - 1;
+        lcd_bot[i - 16] = mus_temp[i] - 2;
     }
 
     // Display it on the lcd now.
@@ -74,7 +74,6 @@ void loop()
     Serial.print(mus_temp + 32);
   }
 
-  
-  
+  // Wait...
   delay(lcd_updaterate); 
 }
