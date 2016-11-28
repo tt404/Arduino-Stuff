@@ -21,6 +21,9 @@ char lcd_top[16]; //top
 // Update rate / fps
 int lcd_updaterate;
 
+// For debugging
+int debug = false;
+
 void setup() 
 { 
   Serial.begin(9600);
@@ -42,11 +45,21 @@ void loop()
 
     // Update top and bottom arrays for lcd
     for(int i = 0; i < 16 ; i++)
-      lcd_top[i] = mus_temp[i];
-
+    {
+      if(mus_temp[i] == 0)
+        lcd_bot[i] = 0xA0;
+      else
+        lcd_bot[i] = mus_temp[i] - 1;
+    }
+    
     // Bottom
     for(int i = 16; i < 32 ; i++)
-      lcd_bot[i - 16] = mus_temp[i];
+    {
+      if(mus_temp[i] == 0)
+        lcd_bot[i - 16] = 0xA0;
+      else
+        lcd_bot[i - 16] = mus_temp[i] - 1;
+    }
 
     // Display it on the lcd now.
     // First we clear.
@@ -60,13 +73,8 @@ void loop()
     lcd.setCursor(0, 1);
     lcd.print(lcd_bot);
 
-    // Done displaying to LCD.
-    // Transfer the next 32 bits from temp into toSend.
-    for(int i = 32; i < 128; i++)
-      mus_toSend[i - 32] = mus_temp[i];
-
     // Send the newly transferred stuff.
-    Serial.print(mus_toSend);
+    Serial.print(mus_temp + 32);
   }
 
   
