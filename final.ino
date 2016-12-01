@@ -1,5 +1,5 @@
 #include <LiquidCrystal.h>
-#define lcd_ticrate 5
+#define lcd_ticrate 20
 
 LiquidCrystal lcd(12,11,5,4,3,2);
 
@@ -67,9 +67,9 @@ void loop()
     for(int i = 0; i < 16 ; i++)
     {
       if(mus_temp[i] == 1)
-        lcd_bot[i] = 0xA0;
+        lcd_top[i] = 0xA0;
       else
-        lcd_bot[i] = mus_temp[i] - 2;
+        lcd_top[i] = mus_temp[i] - 2;
     }
     
     // Bottom
@@ -87,13 +87,15 @@ void loop()
 
     //  We print the top
     lcd.setCursor(0, 0);
-    
+
+    // Write each character individually for top array.
     for(int i = 0; i < 16; i++)
     lcd.write(byte(lcd_top[i]));
 
     // We print the bottom
     lcd.setCursor(0, 1);
 
+    // Write each character individually for bottom array.
     for(int i = 0; i < 16; i++)
     lcd.write(byte(lcd_bot[i]));
 
