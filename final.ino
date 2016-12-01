@@ -1,9 +1,7 @@
-// Static variables
-#define lcd_ticrate 20
-
-// LCD stuff
 #include <LiquidCrystal.h>
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+#define lcd_ticrate 5
+
+LiquidCrystal lcd(12,11,5,4,3,2);
 
 // This holds the music string in bytes
 byte mus_incomingByte;
@@ -22,15 +20,40 @@ int lcd_updaterate;
 int debug = false;
 
 void setup() 
-{ 
-  Serial.begin(9600);
+{
+  // Enable the lcd
   lcd.begin(16,2);
+
+  // Create the ascii table for each "note/bar"
+  byte Ox2[8][8] = 
+  {
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F},
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x1F},
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x1F, 0x1F},
+    {0x00, 0x00, 0x00, 0x00, 0x1F, 0x1F, 0x1F, 0x1F},
+    {0x00, 0x00, 0x00, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F},
+    {0x00, 0x00, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F},
+    {0x00, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F},
+    {0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F}    
+  };
+
+  // Now create the actual characters
+  for(byte i = 0; i < 8; ++i)
+    lcd.createChar(i, Ox2[i]);
+
+  // Begin communication
+  Serial.begin(9600);
+
+  // Welcome message
+  lcd.setCursor(0, 0);
   lcd.print("Welcome to test");
+
+  // Set the frame rate (see lcd_ticrate)
   lcd_updaterate = 1000 / lcd_ticrate; // Currently lcd_ticrate is set to 20, thus this will run 20 times a second.
+
+  // Wait.
   delay(1000);
 }
-
-
 
 void loop() 
 {  
@@ -64,16 +87,19 @@ void loop()
 
     //  We print the top
     lcd.setCursor(0, 0);
-    lcd.print(lcd_top);
+    
+    for(int i = 0; i < 16; i++)
+    lcd.write(byte(lcd_top[i]));
 
     // We print the bottom
     lcd.setCursor(0, 1);
-    lcd.print(lcd_bot);
+
+    for(int i = 0; i < 16; i++)
+    lcd.write(byte(lcd_bot[i]));
 
     // Send the newly transferred stuff.
     Serial.print(mus_temp + 32);
   }
-
-  // Wait...
+  
   delay(lcd_updaterate); 
 }
