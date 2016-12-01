@@ -63,6 +63,9 @@ void loop()
     // Read in music string
     Serial.readBytes(mus_temp, 96);
 
+    // Send the stuff.
+    Serial.print(mus_temp + 32);
+
     // Update top and bottom arrays for lcd
     for(int i = 0; i < 16 ; i++)
     {
@@ -98,9 +101,6 @@ void loop()
     // Write each character individually for bottom array.
     for(int i = 0; i < 16; i++)
     lcd.write(byte(lcd_bot[i]));
-
-    // Send the newly transferred stuff.
-    Serial.print(mus_temp + 32);
   }
   
   delay(lcd_updaterate); 
